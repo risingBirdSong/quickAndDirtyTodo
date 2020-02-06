@@ -1,26 +1,77 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { ChangeEventHandler, ChangeEvent } from "react";
 
-const App = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface appPropsI {}
+
+interface appStateI {
+  newItem: string;
+  items: string[];
+}
+class App extends React.Component<appPropsI, appStateI> {
+  constructor(props: appPropsI) {
+    super(props);
+    this.state = {
+      newItem: "",
+      items: []
+    };
+  }
+
+  updateInput = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    let val = e.target.value;
+    this.setState({ newItem: val });
+    console.log(this.state.newItem);
+  };
+
+  createNewTask = (e: ChangeEvent<any>) => {
+    e.preventDefault();
+    let theList = [...this.state.items, this.state.newItem];
+    this.setState({
+      items: theList,
+      newItem: ""
+    });
+  };
+
+  renderList = (): JSX.Element[] => {
+    return this.state.items.map((val, idx) => {
+      return (
+        <li key={idx}>
+          {val} <button onClick={() => this.deleteItem(val)}>x</button>{" "}
+        </li>
+      );
+    });
+    console.log("the items", this.state.items);
+  };
+
+  deleteItem = (item: string) => {
+    let filtered = this.state.items.filter(todo => todo != item);
+    this.setState({
+      items: filtered
+    });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">Todo App </header>
+        <div>
+          <form action="">
+            <h3>add an item...</h3>
+            <label htmlFor="newItem">task</label>
+            <input
+              type="text"
+              name="newItem"
+              placeholder="todo"
+              value={this.state.newItem}
+              onChange={this.updateInput}
+            />
+            <button onClick={e => this.createNewTask(e)}>add task</button>
+          </form>
+          <h3>do these</h3>
+          <ul>{this.renderList()}</ul>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
