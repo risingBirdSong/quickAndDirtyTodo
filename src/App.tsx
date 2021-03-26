@@ -50,6 +50,7 @@ class App extends React.Component<appPropsI, appStateI> {
   };
 
   render() {
+    // quick simple test, first commit from Ubuntu
     return (
       <div className="App">
         <header className="App-header">Todo App </header>
